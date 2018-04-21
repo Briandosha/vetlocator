@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Vetlocator</string>
+    <string name="title_activity_vetmaps">Map</string>
+    <string name="title_activity_custmaps">Map</string>
+</resources>

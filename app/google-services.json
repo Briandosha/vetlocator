@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "148478180254",
+    "firebase_url": "https://vetlocator-5fa20.firebaseio.com",
+    "project_id": "vetlocator-5fa20",
+    "storage_bucket": "vetlocator-5fa20.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:148478180254:android:b53f38020fccbbeb",
+        "android_client_info": {
+          "package_name": "com.example.brian.vetlocator"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "148478180254-rlmjrus1jd996sk0lmb8kn10h99ur3fs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.brian.vetlocator",
+            "certificate_hash": "14c94eccef5c2922e30e88ccdfc06f0fb750b017"
+          }
+        },
+        {
+          "client_id": "148478180254-evn9viios5s3v7i230hdin7k2mddqd57.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDSvLjaBW3bfcRhHITpvrJX7QtNAuc_rZ0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "148478180254-evn9viios5s3v7i230hdin7k2mddqd57.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
