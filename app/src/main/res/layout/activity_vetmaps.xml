@@ -74,12 +74,12 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingLeft="40sp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/customerDestination"
-                    android:paddingBottom="10sp"
-                    android:text="Destination: --"/>
+                <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:id="@+id/customerDestination"-->
+                    <!--android:paddingBottom="10sp"-->
+                    <!--android:text="Destination: &#45;&#45;"/>-->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -97,7 +97,7 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="picked customer"
+            android:text="reached customer"
             android:id="@+id/rideStatus"/>
 
 

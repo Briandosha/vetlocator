@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,8 +62,8 @@ public class CustmapsActivity extends FragmentActivity implements OnMapReadyCall
     Location mLastLocation;
     LocationRequest mLocationRequest;
 
-    private Button flogout, frequest, fSettings;
-    private LatLng pickuplocation;
+    private Button flogout, frequest, fSettings, fHistory;
+    public LatLng pickuplocation;
     private SupportMapFragment mapFragment;
     private Boolean requestBol = false;
     private Marker pickupMarker;
@@ -73,6 +74,8 @@ public class CustmapsActivity extends FragmentActivity implements OnMapReadyCall
     private ImageView mVetProfileImage;
 
     private TextView mVetName, mVetPhone, mVetCert;
+
+    private RatingBar mRatingBar;
 
 
 
@@ -106,10 +109,24 @@ public class CustmapsActivity extends FragmentActivity implements OnMapReadyCall
         mVetCert = (TextView) findViewById(R.id.vetCert);
 
 
+        mRatingBar = (RatingBar) findViewById(R.id.ratingBar);
+
+
 
         flogout = (Button) findViewById(R.id.flogout);
         frequest = (Button) findViewById(R.id.frequest);
         fSettings = (Button) findViewById(R.id.fsettings);
+        fHistory = findViewById(R.id.fhistory);
+
+        fHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(CustmapsActivity.this, HistoryActivity.class);
+                intent.putExtra("customerOrVet", "Farmers");
+                startActivity(intent);
+                return;
+            }
+        });
 
         flogout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,7 +156,7 @@ public class CustmapsActivity extends FragmentActivity implements OnMapReadyCall
                     geoQuery.removeAllListeners();
                     vetLocationRef.removeEventListener(vetLocationRefListener);
                     if (vetFoundID !=null){
-                        DatabaseReference vetRef = FirebaseDatabase.getInstance().getReference().child("Users").child("Vets").child(vetFoundID).child("customerRequest");
+                        DatabaseReference vetRef = FirebaseDatabase.getInstance().getReference().child("Users").child("Vets").child(vetFoundID).child("customerReqId");
 //                          vetRef.setValue(true);
                         vetRef.removeValue();
                           vetFoundID = null;
@@ -223,6 +240,7 @@ public class CustmapsActivity extends FragmentActivity implements OnMapReadyCall
 
                     getVetLocation();
                     getVetInfo();
+                    getHasRideEnded();
                     frequest.setText("Looking for Vet location");
 
 
@@ -262,7 +280,7 @@ public class CustmapsActivity extends FragmentActivity implements OnMapReadyCall
 
     private void getVetLocation (){
 
-        vetLocationRef = FirebaseDatabase.getInstance().getReference().child("vetWorking").child(vetFoundID).child("l");
+        vetLocationRef = FirebaseDatabase.getInstance().getReference().child("vetsWorking").child(vetFoundID).child("l");
         vetLocationRefListener = vetLocationRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -306,8 +324,11 @@ public class CustmapsActivity extends FragmentActivity implements OnMapReadyCall
                         frequest.setText("Vet found:" + String.valueOf(distance));
                     }
 
-                    mVetMarker = mMap.addMarker(new MarkerOptions().position(vetLatLng).title("Your vet").icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher2)));
+//                    mVetMarker = mMap.addMarker(new MarkerOptions().position(vetLatLng).title("Your vet").icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher2)));
+                    mVetMarker = mMap.addMarker(new MarkerOptions().position(vetLatLng).title("Your vet"));
+
                 }
+
 
             }
 
@@ -342,20 +363,46 @@ public class CustmapsActivity extends FragmentActivity implements OnMapReadyCall
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists() && dataSnapshot.getChildrenCount()>0){
-                    Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
-                    if (map.get("name") != null){
-                        mVetName.setText(map.get("name").toString());
+//                    Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
+//                    if (map.get("name") != null){
+//                        mVetName.setText(map.get("name").toString());
+//                    }
+//                    if (map.get("phone") != null){
+//                        mVetPhone.setText(map.get("phone").toString());
+//                    }
+//
+//                    if (map.get("cert") != null){
+//                        mVetCert.setText(map.get("cert").toString());
+//                    }
+//
+//                    if (map.get("profileImageUrl") != null){
+//                        Glide.with(getApplication()).load(map.get("profileImageUrl").toString()).into(mVetProfileImage);
+//                    }
+
+
+                    if(dataSnapshot.child("name")!=null){
+                        mVetName.setText(dataSnapshot.child("name").getValue().toString());
                     }
-                    if (map.get("phone") != null){
-                        mVetPhone.setText(map.get("phone").toString());
+                    if(dataSnapshot.child("phone")!=null){
+                        mVetPhone.setText(dataSnapshot.child("phone").getValue().toString());
+                    }
+                    if(dataSnapshot.child("car")!=null){
+                        mVetCert.setText(dataSnapshot.child("cert").getValue().toString());
+                    }
+                    if(dataSnapshot.child("profileImageUrl").getValue()!=null){
+                        Glide.with(getApplication()).load(dataSnapshot.child("profileImageUrl").getValue().toString()).into(mVetProfileImage);
                     }
 
-                    if (map.get("cert") != null){
-                        mVetCert.setText(map.get("cert").toString());
+                    int ratingSum = 0;
+                    float ratingsTotal = 0;
+                    float ratingsAvg = 0;
+                    for (DataSnapshot child : dataSnapshot.child("rating").getChildren()){
+                        ratingSum = ratingSum + Integer.valueOf(child.getValue().toString());
+                        ratingsTotal++;
                     }
-
-                    if (map.get("profileImageUrl") != null){
-                        Glide.with(getApplication()).load(map.get("profileImageUrl").toString()).into(mVetProfileImage);
+                    if(ratingsTotal!= 0){
+                        ratingsAvg = ratingSum/ratingsTotal;
+                        mRatingBar.setRating(ratingsAvg);
                     }
 
                 }
@@ -367,6 +414,63 @@ public class CustmapsActivity extends FragmentActivity implements OnMapReadyCall
             }
         });
     }
+
+
+    private DatabaseReference driveHasEndedRef;
+    private ValueEventListener driveHasEndedRefListener;
+    private void getHasRideEnded(){
+        driveHasEndedRef = FirebaseDatabase.getInstance().getReference().child("Users").child("Vets").child(vetFoundID).child("customerReqId");
+        driveHasEndedRefListener = driveHasEndedRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+
+                }else{
+                    endRide();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+    }
+
+    private void endRide(){
+        requestBol = false;
+        geoQuery.removeAllListeners();
+        vetLocationRef.removeEventListener(vetLocationRefListener);
+        driveHasEndedRef.removeEventListener(driveHasEndedRefListener);
+
+        if (vetFoundID != null){
+            DatabaseReference driverRef = FirebaseDatabase.getInstance().getReference().child("Users").child("Vets").child(vetFoundID).child("customerReqId");
+            driverRef.removeValue();
+            vetFoundID = null;
+
+        }
+        vetFound = false;
+        radius = 1;
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("customerRequest");
+        GeoFire geoFire = new GeoFire(ref);
+        geoFire.removeLocation(userId);
+
+        if(pickupMarker != null){
+            pickupMarker.remove();
+        }
+        if (mVetMarker != null){
+            mVetMarker.remove();
+        }
+        frequest.setText("call Vet");
+
+        mVetInfo.setVisibility(View.GONE);
+        mVetName.setText("");
+        mVetPhone.setText("");
+        mVetCert.setText("");
+        mVetProfileImage.setImageResource(R.mipmap.ic_launcher2);
+    }
+
 
 
 

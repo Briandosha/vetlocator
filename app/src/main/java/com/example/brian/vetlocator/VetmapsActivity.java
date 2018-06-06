@@ -53,6 +53,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -65,7 +66,14 @@ public class VetmapsActivity extends FragmentActivity implements OnMapReadyCallb
 
 
 
-    private Button vlogout, mSettings;
+    private Button vlogout, mSettings, mRideStatus, mHistory;
+
+//    public LatLng vetLatLng;
+
+//    public LatLng vetLatLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+
+
+    private  int status = 0;
     private String customerId = "";
     private SupportMapFragment mapFragment;
 
@@ -117,6 +125,47 @@ public class VetmapsActivity extends FragmentActivity implements OnMapReadyCallb
         });
 
         mSettings = findViewById(R.id.settings);
+        mHistory = findViewById(R.id.history);
+
+
+        mHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(VetmapsActivity.this, HistoryActivity.class);
+                intent.putExtra("customerOrVet", "Vets");
+                startActivity(intent);
+                return;
+            }
+        });
+
+
+
+
+        mRideStatus = findViewById(R.id.rideStatus);
+
+        mRideStatus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switch (status){
+                    case 1:
+                        status=2;
+                        erasePolylines();
+                        mRideStatus.setText("Reached customer");
+
+
+                        break;
+
+                    case 2:
+                        recordTreatment();
+                        endTreatment();
+
+                        break;
+
+
+                }
+            }
+        });
+
         vlogout = findViewById(R.id.vlogout);
         vlogout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,6 +202,8 @@ public class VetmapsActivity extends FragmentActivity implements OnMapReadyCallb
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists() && customerId.equals("")){
+
+                    status = 1;
                         customerId = dataSnapshot.getValue().toString();
                         getAssignedCustomerPickupLocation();
                     getAssignedCustomerInfo();
@@ -185,6 +236,11 @@ public class VetmapsActivity extends FragmentActivity implements OnMapReadyCallb
     Marker pickupMarkerV;
     private DatabaseReference getAssignedCustomerPickupLocationRef;
     private ValueEventListener getAssignedCustomerPickupLocationRefListener;
+    public LatLng custLatLng;
+    public LatLng custLat;
+    public LatLng custLng;
+//    public LatLng vetLatLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+
 
     private void getAssignedCustomerPickupLocation(){
         getAssignedCustomerPickupLocationRef = FirebaseDatabase.getInstance().getReference().child("customerRequest").child(customerId).child("l");
@@ -199,13 +255,15 @@ public class VetmapsActivity extends FragmentActivity implements OnMapReadyCallb
 
                     if (map.get(0) != null) {
                         locationLat = Double.parseDouble(map.get(0).toString());
+
                     }
 
 
                     if (map.get(1) != null) {
                         locationLng = Double.parseDouble(map.get(1).toString());
                     }
-                    LatLng custLatLng = new LatLng(locationLat,locationLng);
+//                    LatLng custLatLng = new LatLng(locationLat,locationLng);
+                     custLatLng = new LatLng(locationLat,locationLng);
                     pickupMarkerV = mMap.addMarker(new MarkerOptions().position(custLatLng).title("Pickup location").icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher3)));
                 getRouteToMarker(custLatLng);
                 }
@@ -263,6 +321,65 @@ public class VetmapsActivity extends FragmentActivity implements OnMapReadyCallb
 
             }
         });
+    }
+
+
+    private void endTreatment(){
+        mRideStatus.setText("picked customer");
+        erasePolylines();
+
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference driverRef = FirebaseDatabase.getInstance().getReference().child("Users").child("Vets").child(userId).child("customerReqId");
+        driverRef.removeValue();
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("customerRequest");
+        GeoFire geoFire = new GeoFire(ref);
+        geoFire.removeLocation(customerId);
+        customerId="";
+//        rideDistance = 0;
+
+        if(pickupMarkerV != null){
+            pickupMarkerV.remove();
+        }
+        if (getAssignedCustomerPickupLocationRef != null) {
+            getAssignedCustomerPickupLocationRef.removeEventListener(getAssignedCustomerPickupLocationRefListener);
+        }
+        mCustomerInfo.setVisibility(View.GONE);
+        mCustomerName.setText("");
+        mCustomerPhone.setText("");
+        mCustomerProfileImage.setImageResource(R.mipmap.ic_launcher3);
+    }
+
+    private void recordTreatment(){
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference vetRef = FirebaseDatabase.getInstance().getReference().child("Users").child("Vets").child(userId).child("history");
+        DatabaseReference customerRef = FirebaseDatabase.getInstance().getReference().child("Users").child("Farmers").child(customerId).child("history");
+        DatabaseReference historyRef = FirebaseDatabase.getInstance().getReference().child("history");
+        String requestId = historyRef.push().getKey();
+        vetRef.child(requestId).setValue(true);
+        customerRef.child(requestId).setValue(true);
+
+        HashMap map = new HashMap();
+        map.put("vet", userId);
+        map.put("customer", customerId);
+        map.put("rating", 0);
+        map.put("timestamp", getCurrentTimestamp());
+//        map.put("destination", custLatLng);
+//       map.put("location/from/lat", vetLatLng.latitude);
+//        map.put("location/from/lng", vetLatLng.longitude);
+//        map.put("location/to/lat", custLatLng.latitude);
+//        map.put("location/to/lng", custLatLng.longitude);
+        map.put("lat", custLatLng.latitude);
+        map.put("lng", custLatLng.longitude);
+        map.put("Animals_treated", "none");
+//        map.put("distance", rideDistance);
+
+        historyRef.child(requestId).updateChildren(map);
+    }
+
+    private Long getCurrentTimestamp() {
+        Long timestamp = System.currentTimeMillis()/1000;
+        return timestamp;
     }
 
 
@@ -393,8 +510,7 @@ final int LOCATION_REQUEST_CODE = 1;
 //        }
 //    }
 
-//    LatLng vetLatLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-
+//    public LatLng vetLatLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
 
     private List<Polyline> polylines;
     private static final int[] COLORS = new int[]{R.color.primary_dark_material_light};
