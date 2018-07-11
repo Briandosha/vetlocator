@@ -60,7 +60,8 @@
         <activity android:name=".CustsettingsActivity" />
         <activity android:name=".VetsettingsActivity" />
         <activity android:name=".HistoryActivity" />
-        <activity android:name=".HistorySingleActivity"></activity>
+        <activity android:name=".HistorySingleActivity" />
+        <activity android:name=".HeatmapsActivity"></activity>
     </application>
 
 </manifest>

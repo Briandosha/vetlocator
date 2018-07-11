@@ -64,6 +64,9 @@ public class VetmapsActivity extends FragmentActivity implements OnMapReadyCallb
     Location mLastLocation;
     LocationRequest mLocationRequest;
 
+    private String animalstreatedtest = "test";
+    private String diseasestreatedtest = "test";
+
 
 
     private Button vlogout, mSettings, mRideStatus, mHistory;
@@ -359,6 +362,8 @@ public class VetmapsActivity extends FragmentActivity implements OnMapReadyCallb
         vetRef.child(requestId).setValue(true);
         customerRef.child(requestId).setValue(true);
 
+
+
         HashMap map = new HashMap();
         map.put("vet", userId);
         map.put("customer", customerId);
@@ -371,7 +376,8 @@ public class VetmapsActivity extends FragmentActivity implements OnMapReadyCallb
 //        map.put("location/to/lng", custLatLng.longitude);
         map.put("lat", custLatLng.latitude);
         map.put("lng", custLatLng.longitude);
-        map.put("Animals_treated", "none");
+        map.put("animals_treated", animalstreatedtest);
+        map.put("diseases_treated", diseasestreatedtest);
 //        map.put("distance", rideDistance);
 
         historyRef.child(requestId).updateChildren(map);

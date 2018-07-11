@@ -53,7 +53,13 @@
                 android:layout_height="wrap_content"
                 android:text="Animal Treated"
                 android:layout_marginBottom="20sp"
-                android:id="@+id/animalTreated"/>
+                android:id="@+id/Animals_treated"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Disease Treated"
+                android:layout_marginBottom="20sp"
+                android:id="@+id/diseases_treated"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -91,48 +97,64 @@
 
 
             </RadioGroup>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <ImageView
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:id="@+id/userImage"
-                android:src="@mipmap/ic_launcher3"/>
-            <LinearLayout
-                android:layout_width="wrap_content"
+            <Spinner
+                android:id="@+id/spinner2"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="20sp">
-                <TextView
-                    android:layout_width="match_parent"
+                android:visibility="gone"
+                android:entries="@array/diseases_arrays"
+                android:prompt="@string/diseases_prompt"/>
+
+
+
+                <Button
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="name"
-                    android:layout_marginBottom="20sp"
-                    android:id="@+id/userName"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="phone"
-                    android:layout_marginBottom="20sp"
-                    android:id="@+id/userPhone"/>
+                    android:id="@+id/confirm"
+                    android:visibility="gone"
+                    android:hint="Confirm"/>
 
             </LinearLayout>
-        </LinearLayout>
-        <RatingBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/ratingBar"
-            android:layout_gravity="center"
-            android:numStars="5"
-            android:stepSize="1"
-            android:visibility="gone"/>
-        <!--<Button-->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:id="@+id/userImage"
+                    android:src="@mipmap/ic_launcher3"/>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="20sp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="name"
+                        android:layout_marginBottom="20sp"
+                        android:id="@+id/userName"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="phone"
+                        android:layout_marginBottom="20sp"
+                        android:id="@+id/userPhone"/>
+
+                </LinearLayout>
+            </LinearLayout>
+            <RatingBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/ratingBar"
+                android:layout_gravity="center"
+                android:numStars="5"
+                android:stepSize="1"
+                android:visibility="gone"/>
+            <!--<Button-->
             <!--android:layout_width="match_parent"-->
             <!--android:layout_height="wrap_content"-->
             <!--android:id="@+id/pay"-->

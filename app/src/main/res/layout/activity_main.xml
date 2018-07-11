@@ -20,4 +20,9 @@
         android:layout_height="wrap_content"
         android:text="Client"
         android:id="@+id/farmer"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Heatmaps"
+        android:id="@+id/heatmaps"/>
 </LinearLayout>

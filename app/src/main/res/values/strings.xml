@@ -2,4 +2,111 @@
     <string name="app_name">Vetlocator</string>
     <string name="title_activity_vetmaps">Map</string>
     <string name="title_activity_custmaps">Map</string>
+    <string name="diseases_prompt">Choose a disease</string>
+    <string name="planet_prompt">Choose a planet</string>
+
+    <string-array name="diseases_arrays">
+        <item>3</item>
+        <item>Venus</item>
+        <item>Earth</item>
+        <item>Mars</item>
+        <item>Jupiter</item>
+        <item>Saturn</item>
+        <item>Uranus</item>
+        <item>Neptune</item>
+       <!--<Item> Acute hepatopancreatic necrosis disease</Item>-->
+        <!--<Item>  Aflatoxicosis</Item>-->
+        <!--<Item>African swine fever</Item>-->
+        <!--<Item>Akabane</Item>-->
+        <!--<Item>Anthrax	Bacillus anthracises</Item>-->
+        <!--<Item>Australian bat lyssavirus</Item>-->
+        <!--<Item>Avian influenza (bird flu)</Item>-->
+        <!--<Item>Avian paramyxovirus</Item>-->
+        <!--<Item>  Blue-green algae (cyanobacteria)</Item>-->
+        <!--<Item>  Bluetongue</Item>-->
+        <!--<Item>  Botulism</Item>-->
+        <!--<Item>  Botulism in poultry</Item>-->
+        <!--<Item>  Bovine ephemeral fever</Item>-->
+        <!--<Item>  Bovine tuberculosis</Item>-->
+        <!--<Item>  Bovine virus diarrhoea</Item>-->
+        <!--<Item>  Brucellosis	Brucella spp</Item>-->
+        <!--<Item>  Endemic</Item>-->
+        <!--<Item>  Brucella ovis</Item>-->
+        <!--<Item>  Buffalo fly</Item>-->
+        <!--<Item>  Campylobacteriosis (vibriosis)</Item>-->
+        <!--<Item>  Caprine arthritis</Item>-->
+        <!--<Item>  Cat-scratch disease</Item>-->
+        <!--<Item>  Cattle ticks</Item>-->
+        <!--<Item>  Classical swine fever</Item>-->
+        <!--<Item>  Clostridial diseases</Item>-->
+        <!--<Item>  Copper deficiency</Item>-->
+        <!--<Item>  Cryptococcosis</Item>-->
+        <!--<Item>  Enzootic bovine leucosis (EBL)</Item>-->
+        <!--<Item>  Epizootic ulcerative syndrome (red-spot disease)</Item>-->
+        <!--<Item>  Equine herpesvirus</Item>-->
+        <!--<Item>  Equine infectious anaemia (EIA)</Item>-->
+        <!--<Item>  Equine influenza</Item>-->
+        <!--<Item>  Equine viral arteritis (EVA)</Item>-->
+        <!--<Item>  Foot and mouth disease</Item>-->
+        <!--<Item>  Fowl choleraa</Item>-->
+        <!--<Item>  Fowl pox</Item>-->
+        <!--<Item>  Giardiasis</Item>-->
+        <!--<Item>  Hendra virus</Item>-->
+        <!--<Item>  Hydatid disease (hydatid cysts)</Item>-->
+        <!--<Item>  Infectious laryngotracheitis</Item>-->
+        <!--<Item>  Japanese encephalitis</Item>-->
+        <!--<Item>  Johne's disease</Item>-->
+        <!--<Item>  Leptospirosis</Item>-->
+        <!--<Item>  Listeriosis</Item>-->
+        <!--<Item>  Lumpy jaw</Item>-->
+        <!--<Item>  Marek’s disease</Item>-->
+        <!--<Item>  Melioidosis	Burkholderia pseudomallei</Item>-->
+        <!--<Item>  Neospora caninum</Item>-->
+        <!--<Item>  Newcastle disease</Item>-->
+        <!--<Item>  Nipah virus</Item>-->
+        <!--<Item>  Nosema</Item>-->
+        <!--<Item>  Ovine brucellosis</Item>-->
+        <!--<Item>  Pestivirus</Item>-->
+        <!--<Item>  Pimelea poisoning</Item>-->
+        <!--<Item>  Psittacosis</Item>-->
+        <!--<Item>  Q fever</Item>-->
+        <!--<Item>  Rabies</Item>-->
+        <!--<Item>  Rinderpest</Item>-->
+        <!--<Item>  Ringworm</Item>-->
+        <!--<Item>  Salmonellosis</Item>-->
+        <!--<Item>  Screw-worm fly</Item>-->
+        <!--<Item>  Skin fluke infestation</Item>-->
+        <!--<Item>  Sparganosis</Item>-->
+        <!--<Item>  Spotty liver</Item>-->
+        <!--<Item>  Strangles</Item>-->
+        <!--<Item>  Swine fever, African</Item>-->
+        <!--<Item>  Swine fever, classical</Item>-->
+        <!--<Item>  Swine influenza</Item>-->
+        <!--<Item>  Swine vesicular disease</Item>-->
+        <!--<Item>  Tetanus</Item>-->
+        <!--<Item>  Tick fever</Item>-->
+        <!--<Item>  Toxocariasis</Item>-->
+        <!--<Item>  Toxoplasmosis</Item>-->
+        <!--<Item>  Transit tetany</Item>-->
+        <!--<Item>  Transmissible</Item>-->
+        <!--<Item>  Tuberculosis (TB)</Item>-->
+        <!--<Item>  Vesicular exanthema</Item>-->
+        <!--<Item>  Vesicular stomatitis</Item>-->
+        <!--<Item>  Warts</Item>-->
+        <!--<Item>  White nose syndrome</Item>-->
+        <!--<Item>  White spot disease</Item>-->
+        <!--<Item> Wooden tongue (and lumpy jaw)</Item>-->
+
+
+    </string-array>
+    <string-array name="planets_array">
+        <item>3</item>
+        <item>Venus</item>
+        <item>Earth</item>
+        <item>Mars</item>
+        <item>Jupiter</item>
+        <item>Saturn</item>
+        <item>Uranus</item>
+        <item>Neptune</item>
+    </string-array>
 </resources>

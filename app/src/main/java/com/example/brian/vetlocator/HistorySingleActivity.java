@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RatingBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +40,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -56,12 +58,15 @@ public class HistorySingleActivity extends AppCompatActivity implements OnMapRea
     private double loclat;
     private double loclng;
 
+    private Button mBack, mConfirm;
+
 
 
     private TextView treatmentDate;
     private TextView userName;
     private TextView userPhone;
-    private TextView animalTreated;
+    private TextView animals_treated;
+    private TextView diseases_treated;
 
     private Marker treatmentloc;
 
@@ -69,7 +74,7 @@ public class HistorySingleActivity extends AppCompatActivity implements OnMapRea
 
     private RatingBar mRatingBar;
 
-    private RadioGroup mRadioGroup1;
+    public RadioGroup mRadioGroup1;
 
     private Button mPay;
 
@@ -82,6 +87,8 @@ public class HistorySingleActivity extends AppCompatActivity implements OnMapRea
 
     private Double treatmentPrice;
 
+    private Spinner spinner1, spinner2;
+
     private Boolean customerPaid = false;
 
     private GoogleMap mMap;
@@ -91,9 +98,18 @@ public class HistorySingleActivity extends AppCompatActivity implements OnMapRea
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history_single);
 
+
+        addItemsOnSpinner2();
+        addListenerOnButton();
+        addListenerOnSpinnerItemSelection();
+
         polylines = new ArrayList<>();
 
         treatmentId = getIntent().getExtras().getString("treatmentId");
+
+//        mConfirm = (Button) findViewById(R.id.confirm);
+
+
 
 
 
@@ -105,7 +121,8 @@ public class HistorySingleActivity extends AppCompatActivity implements OnMapRea
 
         treatmentLat = (TextView) findViewById(R.id.treatmentLat);
         treatmentLng = (TextView) findViewById(R.id.treatmentLng);
-        animalTreated = (TextView) findViewById(R.id.animalTreated);
+        animals_treated = (TextView) findViewById(R.id.Animals_treated);
+        diseases_treated = (TextView) findViewById(R.id.diseases_treated);
 
         treatmentDate = (TextView) findViewById(R.id.treatmentDate);
         userName = (TextView) findViewById(R.id.userName);
@@ -119,12 +136,101 @@ public class HistorySingleActivity extends AppCompatActivity implements OnMapRea
 
 //        mPay = findViewById(R.id.pay);
 
+        mConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                int selectedId = mRadioGroup1.getCheckedRadioButtonId();
+
+                final RadioButton radioButton = (RadioButton) findViewById(selectedId);
+
+        if (radioButton.getText() == null){
+          return;
+
+
+        }
+
+
+        selectedAnimal = radioButton.getText().toString();
+
+                historyTreatmentInfoDb.child("animals_treated").setValue(selectedAnimal);
+                historyTreatmentInfoDb.child("diseases_treated").setValue(String.valueOf(spinner2.getSelectedItem()));
+
+//                Toast.makeText(HistorySingleActivity.this,
+//                        "OnClickListener : " +
+//                                "\nSpinner 2 : "+ String.valueOf(spinner2.getSelectedItem()),
+//                        Toast.LENGTH_SHORT).show();
+                mConfirm.setVisibility(View.GONE);
+                mRadioGroup1.setVisibility(View.GONE);
+                spinner2.setVisibility(View.GONE);
+
+            }
+        });
+
+
         currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         historyTreatmentInfoDb = FirebaseDatabase.getInstance().getReference().child("history").child(treatmentId);
         getTreatmentInformation();
 
+
     }
+
+
+
+    // add items into spinner dynamically
+    public void addItemsOnSpinner2() {
+
+//        spinner2 = (Spinner) findViewById(R.id.spinner2);
+//        List<String> list = new ArrayList<String>();
+//        list.add("list 1");
+//        list.add("list 2");
+//        list.add("list 3");
+//        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+//                android.R.layout.simple_spinner_item, list);
+//        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        spinner2.setAdapter(dataAdapter);
+    }
+
+    public void addListenerOnSpinnerItemSelection() {
+//        spinner1 = (Spinner) findViewById(R.id.spinner1);
+//        spinner1.setOnItemSelectedListener(new SpinnerListener());
+        spinner2 = (Spinner) findViewById(R.id.spinner2);
+        spinner2.setOnItemSelectedListener(new SpinnerListener());
+    }
+
+    // get the selected dropdown list value
+    public void addListenerOnButton() {
+
+//        spinner1 = (Spinner) findViewById(R.id.spinner1);
+        spinner2 = (Spinner) findViewById(R.id.spinner2);
+        mConfirm = (Button) findViewById(R.id.confirm);
+
+        mConfirm.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+//                Toast.makeText(HeatmapsActivity.this,
+//                        "OnClickListener : " +
+//                                "\nSpinner 1 : "+ String.valueOf(spinner1.getSelectedItem()) +
+//                                "\nSpinner 2 : "+ String.valueOf(spinner2.getSelectedItem()),
+//                        Toast.LENGTH_SHORT).show();
+//                Toast.makeText(HistorySingleActivity.this,
+//                        "OnClickListener : " +
+//                                "\nSpinner 2 : "+ String.valueOf(spinner2.getSelectedItem()),
+//                        Toast.LENGTH_SHORT).show();
+                mConfirm.setVisibility(View.GONE);
+
+
+            }
+
+        });
+    }
+
+
+
+
 
     private void getTreatmentInformation() {
         historyTreatmentInfoDb.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -143,6 +249,7 @@ public class HistorySingleActivity extends AppCompatActivity implements OnMapRea
                                 userVetOrCustomer = "Vets";
                                 getUserInformation("Farmers", customerId);
                                 getAnimalTreated();
+
                             }
                         }
                         if (child.getKey().equals("vet")) {
@@ -160,8 +267,12 @@ public class HistorySingleActivity extends AppCompatActivity implements OnMapRea
                             mRatingBar.setRating(Integer.valueOf(child.getValue().toString()));
 
                         }
-                        if (child.getKey().equals("Animals_treated")) {
-                            animalTreated.setText(child.getValue().toString());
+                        if (child.getKey().equals("animals_treated")) {
+                            animals_treated.setText(child.getValue().toString());
+
+                        }
+                        if (child.getKey().equals("diseases_treated")) {
+                            diseases_treated.setText(child.getValue().toString());
 
                         }
 
@@ -228,18 +339,21 @@ public class HistorySingleActivity extends AppCompatActivity implements OnMapRea
 
     private void getAnimalTreated(){
         mRadioGroup1.setVisibility(View.VISIBLE);
-        int selectedId = mRadioGroup1.getCheckedRadioButtonId();
-
-        final RadioButton radioButton = (RadioButton) findViewById(selectedId);
-
-        if (radioButton.getText() != null){
-//            return;
-
-            selectedAnimal = radioButton.getText().toString();
-            historyTreatmentInfoDb.child("Animals_treated").setValue(selectedAnimal);
-
-        }
-
+        spinner2.setVisibility(View.VISIBLE);
+        mConfirm.setVisibility(View.VISIBLE);
+//        int selectedId = mRadioGroup1.getCheckedRadioButtonId();
+//
+//        final RadioButton radioButton = (RadioButton) findViewById(selectedId);
+//
+//        if (radioButton.getText() == null){
+//          return;
+//
+//
+//        }
+//
+//
+//        selectedAnimal = radioButton.getText().toString();
+//
 
 
     }

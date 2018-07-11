@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
-    private Button mVet, mFarmer;
+    private Button mVet, mFarmer, mheatmaps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
 
         mVet = (Button) findViewById(R.id.vet);
         mFarmer = (Button) findViewById(R.id.farmer);
+        mheatmaps = findViewById(R.id.heatmaps);
 
         startService(new Intent(MainActivity.this, onAppKilled.class));
 
@@ -39,5 +40,17 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
         });
+
+
+        mheatmaps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, HeatmapsActivity.class);
+                startActivity(intent);
+                finish();
+                return;
+            }
+        });
+
     }
 }
